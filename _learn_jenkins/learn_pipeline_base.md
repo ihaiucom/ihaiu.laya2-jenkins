@@ -1,21 +1,4 @@
-## Jenkins 相关文档
 
-[Jenkins官方文档]  
-https://github.com/ihaiucom/Jenkinsdocs
-
-[Jenkins教程]  
-https://jenkins.io/zh/doc/book/pipeline/#scripted-pipeline-fundamentals
-
-[第十章-流水线实践(二)] 
-https://github.com/ihaiucom/Jenkinsdocs/blob/master/chapter/第十章-流水线实践(二).md
-
-[流水线语法] 
-https://jenkins.io/zh/doc/book/pipeline/syntax/
-
-
-## Jenkins Pipline 
-
-```
 String workspace="D:/Jenkins/GameJJSG/"
 pipeline 
 {
@@ -69,6 +52,7 @@ pipeline
 	  	script
 	  	{
 
+	  		currentBuild.description = "always"
 	    	echo "always 无论流水线或阶段的完成状态如何，都允许在 post 部分运行该步骤。"
 	  	}
 	  }
@@ -95,7 +79,11 @@ pipeline
 
 	  aborted 
 	  {
-	    echo "aborted 只有当前流水线或阶段的完成状态为aborted，才允许在 post 部分运行该步骤, 通常由于流水线被手动的aborted。通常web UI是灰色"
+	  		script
+	  		{
+	  			currentBuild.description = "aborted"
+	    		echo "aborted 只有当前流水线或阶段的完成状态为aborted，才允许在 post 部分运行该步骤, 通常由于流水线被手动的aborted。通常web UI是灰色"
+	  		}
 	  }
 
 	  success 
@@ -103,14 +91,18 @@ pipeline
 	  	script
 	  	{
 
-	  		currentBuild.description += "\n 构建成功"
+	  		currentBuild.description = "构建成功"
 	    	echo "success 只有当前流水线或阶段的完成状态为success，才允许在 post 部分运行该步骤, 通常web UI是蓝色或绿色。"
 	  	}
 	  }
 
 	  failure 
 	  {
-	    echo "failure 只有当前流水线或阶段的完成状态为failure，才允许在 post 部分运行该步骤, 通常web UI是红色。"
+	  		script
+	  		{
+	  			currentBuild.description = "构建失败"
+	    		echo "failure 只有当前流水线或阶段的完成状态为failure，才允许在 post 部分运行该步骤, 通常web UI是红色。"
+	  		}
 	  }
 
 	  unsuccessful 
@@ -125,48 +117,14 @@ pipeline
 
 	  changed 
 	  {
-	    echo "changed 只有当前流水线或阶段的完成状态与它之前的运行不同时，才允许在 post 部分运行该步骤。"
+	  		script
+	  		{
+	  			currentBuild.description = "changed"
+	    		echo "changed 只有当前流水线或阶段的完成状态与它之前的运行不同时，才允许在 post 部分运行该步骤。"
+	  		}
 	  }
 	}
 
 
 
 }
-
-
-```
-
-
-## 安装nodejs
-http://nodejs.cn/
-
-## 安装cnpm
-https://npm.taobao.org/
-
-npm install -g cnpm --registry=https://registry.npm.taobao.org
-
-
-## 安装gulp
-https://www.cnblogs.com/bobo1/p/10918641.html
-
-https://www.cnblogs.com/limitcode/p/7906447.html
-
-cnpm install -g gulp
-cnpm install --save-dev gulp
-cnpm install gulp
-cnpm install --save gulp
-
-## 安装layaair2-cmd
-https://npm.taobao.org/package/layaair2-cmd
-
-cnpm install layaair2-cmd -g
-cnpm install layaair2-cmd
-cnpm install --save layaair2-cmd
-
-
-node_modules\.bin\layaair2-cmd compile -w D:\zengfeng\githubs\ihaiu.laya2-jenkins\LayaGame24
-node_modules\.bin\layaair2-cmd publish -c web -w D:\zengfeng\githubs\ihaiu.laya2-jenkins\LayaGame24
-node_modules\.bin\layaair2-cmd publish -c wxgame -w D:\zengfeng\githubs\ihaiu.laya2-jenkins\LayaGame24
-
-
-layaair2-cmd compile -w D:\zengfeng\githubs\ihaiu.laya2-jenkins\LayaGame24
