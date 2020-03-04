@@ -1,0 +1,46 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.36">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.5.1"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.5.1">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>微信IDE--登录</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.12"/>
+    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.13">
+      <gitLabConnection></gitLabConnection>
+    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
+    <script>pipeline {
+   agent any
+
+   stages {
+      stage(&apos;微信IDE--登录&apos;) {
+         steps {
+             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: &apos;&apos;, reportFiles: &apos;index.html&apos;, reportName: &apos;HTML Report&apos;, reportTitles: &apos;&apos;])
+            	
+            bat label: &apos;&apos;, script: 
+            &apos;&apos;&apos;
+            (
+                echo &apos;&lt;a target=&quot;_blank&quot; href=&quot;http://127.0.0.1:3000/login&quot;&gt;http://127.0.0.1:3000/login&lt;/a&gt;&apos;
+            	cli --port 3000 -o
+            	cli -l  --login-qr-output base64
+            	
+            )
+            &apos;&apos;&apos;
+         }
+      }
+   }
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

@@ -1,0 +1,51 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.36">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.5.1"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.5.1">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>发布微信小游戏</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.12"/>
+    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.13">
+      <gitLabConnection></gitLabConnection>
+    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
+    <script>pipeline {
+   agent any
+
+   stages {
+      stage(&apos;打开微信IDE&apos;) {
+         steps {
+            bat label: &apos;&apos;, script: 
+            &apos;&apos;&apos;
+            echo %PATH%
+            cli.bat --port 3000 -o D:/zengfeng/GameJJSGH5/client/client/GameWX/wxgame 
+            &apos;&apos;&apos;
+         }
+      }
+      
+      
+      stage(&apos;微信IDE--上传&apos;) {
+         steps {
+            bat label: &apos;&apos;, script: 
+            &apos;&apos;&apos;
+            cli -u 1.0.0@D:/zengfeng/GameJJSGH5/client/client/GameWX/wxgame --upload-desc &apos;initial release&apos; --upload-info-output D:/zengfeng/githubs/ihaiu.laya2-jenkins/_learn_wxgame/info.json
+            &apos;&apos;&apos;
+         }
+      }
+   }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

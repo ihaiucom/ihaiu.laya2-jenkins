@@ -1,0 +1,177 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.36">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.5.1"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.5.1">
+      <jobProperties>
+        <string>org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty</string>
+      </jobProperties>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>学习jenkins 共享库</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.12"/>
+    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.13">
+      <gitLabConnection></gitLabConnection>
+    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty/>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
+    <script>
+// 引用库
+@Library(&quot;learn_jenkins_share_lib&quot;) _
+
+// 创建库里的类
+def tools = new ihaiu.develops.tools()
+
+String workspace=&quot;D:/Jenkins/GameJJSG/&quot;
+pipeline 
+{
+   agent 
+   {
+       node 
+       {
+            label &quot;master&quot;						// 设置运行机器节点标签
+            customWorkspace &quot;${workspace}&quot; 		// 自定义在工作空间 
+       }
+   }
+
+   options 
+   {
+   		timestamps()  							// 日志会有时间
+	  	timeout(time: 20, unit: &apos;SECONDS&apos;) 		// 设置超时时间
+	  	retry(2)								// 设置重复次数
+	  	disableConcurrentBuilds()				// 不允许并发构建
+	  	//skipDefaultCheckout true				// 删除隐试checkou scm语句
+	}
+
+
+   stages 
+   {
+      stage(&apos;步骤一:拉取GIT&apos;) 
+      {
+         steps 
+         {
+         	echo &quot;开始拉取GIT&quot;
+            git credentialsId: &apos;647b7b11-5185-4289-843d-77cc8dfbc945&apos;, url: &apos;git@github.com:ihaiucom/ihaiu.laya2-jenkins.git&apos;
+         }
+      }
+
+      stage(&apos;步骤二：Say Hello&apos;) 
+      {
+         steps 
+         {
+            echo &apos;Begin Say&apos;
+         	timeout(time: 3, unit: &apos;SECONDS&apos;)  // 设置超时时间
+         	{
+            	echo &apos;Hello World&apos;
+			}
+         }
+      }
+
+      stage(&apos;步骤三：调用库&apos;) 
+      {
+         steps 
+         {
+         	script
+         	{
+         		println(&quot;第三步开始&quot;)
+         		tools.PrintMe(&quot;通过共享库调用的方法&quot;)
+         	}
+         }
+      }
+   }
+
+   post 
+   {
+	  always 
+	  {
+	  	script
+	  	{
+
+	  		currentBuild.description = &quot;always&quot;
+	    	echo &quot;always 无论流水线或阶段的完成状态如何，都允许在 post 部分运行该步骤。&quot;
+	  	}
+	  }
+
+	  unstable 
+	  {
+	  	echo &quot;unstable 只有当前流水线或阶段的完成状态为unstable，才允许在 post 部分运行该步骤, 通常由于测试失败,代码违规等造成。通常web UI是黄色。&quot;
+	  }
+
+	  notBuilt 
+	  {
+	    echo &quot;notBuilt&quot;
+	  }
+
+	  cleanup 
+	  {
+	    echo &quot;cleanup&quot;
+	  }
+
+	  regression 
+	  {
+	    echo &quot;regression&quot;
+	  }
+
+	  aborted 
+	  {
+	  		script
+	  		{
+	  			currentBuild.description = &quot;aborted&quot;
+	    		echo &quot;aborted 只有当前流水线或阶段的完成状态为aborted，才允许在 post 部分运行该步骤, 通常由于流水线被手动的aborted。通常web UI是灰色&quot;
+	  		}
+	  }
+
+	  success 
+	  {
+	  	script
+	  	{
+
+	  		currentBuild.description = &quot;构建成功&quot;
+	    	echo &quot;success 只有当前流水线或阶段的完成状态为success，才允许在 post 部分运行该步骤, 通常web UI是蓝色或绿色。&quot;
+	  	}
+	  }
+
+	  failure 
+	  {
+	  		script
+	  		{
+	  			currentBuild.description = &quot;构建失败&quot;
+	    		echo &quot;failure 只有当前流水线或阶段的完成状态为failure，才允许在 post 部分运行该步骤, 通常web UI是红色。&quot;
+	  		}
+	  }
+
+	  unsuccessful 
+	  {
+	    echo &quot;unsuccessful&quot;
+	  }
+
+	  fixed 
+	  {
+	    echo &quot;fixed&quot;
+	  }
+
+	  changed 
+	  {
+	  		script
+	  		{
+	  			currentBuild.description = &quot;changed&quot;
+	    		echo &quot;changed 只有当前流水线或阶段的完成状态与它之前的运行不同时，才允许在 post 部分运行该步骤。&quot;
+	  		}
+	  }
+	}
+
+
+
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
