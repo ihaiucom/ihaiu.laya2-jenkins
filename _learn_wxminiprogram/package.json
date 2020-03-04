@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "miniprogram-automator": "^0.9.1"
+  }
+}

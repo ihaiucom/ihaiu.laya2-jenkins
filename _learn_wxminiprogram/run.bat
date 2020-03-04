@@ -1,0 +1,2 @@
+node automator.js
+pause

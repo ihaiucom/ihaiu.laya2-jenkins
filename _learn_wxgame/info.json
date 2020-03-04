@@ -1,0 +1,19 @@
+{
+  "size": {
+    "total": 5939.14,
+    "packages": [
+      {
+        "name": "/game/",
+        "size": 2411.02
+      },
+      {
+        "name": "main",
+        "size": 3528.12
+      },
+      {
+        "name": "__FULL__",
+        "size": 5939.14
+      }
+    ]
+  }
+}
