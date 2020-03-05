@@ -11,12 +11,7 @@
   </actions>
   <description>微信IDE--登录</description>
   <keepDependencies>false</keepDependencies>
-  <properties>
-    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.12"/>
-    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.13">
-      <gitLabConnection></gitLabConnection>
-    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
-  </properties>
+  <properties/>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
     <script>pipeline {
    agent any
@@ -24,14 +19,16 @@
    stages {
       stage(&apos;微信IDE--登录&apos;) {
          steps {
-             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: &apos;&apos;, reportFiles: &apos;index.html&apos;, reportName: &apos;HTML Report&apos;, reportTitles: &apos;&apos;])
-            	
+            //  publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: &apos;&apos;, reportFiles: &apos;index.html&apos;, reportName: &apos;HTML Report&apos;, reportTitles: &apos;&apos;])
+            emailext body: &apos;打开该链接，F5刷新一下，扫码登陆  &lt;a target=&quot;_blank&quot; href=&quot;${URL_WWW}wxide/cli_login.html&quot;&gt;${URL_WWW}wxide/cli_login.html&lt;/a&gt; &apos;, subject: &apos;登录微信小游戏IDE扫码&apos;, to: &apos;fengzeng@123u.com&apos;
+            		
             bat label: &apos;&apos;, script: 
             &apos;&apos;&apos;
             (
-                echo &apos;&lt;a target=&quot;_blank&quot; href=&quot;http://127.0.0.1:3000/login&quot;&gt;http://127.0.0.1:3000/login&lt;/a&gt;&apos;
-            	cli --port 3000 -o
-            	cli -l  --login-qr-output base64
+                echo &apos;打开该链接，F5刷新一下，扫码登陆 %URL_WWW%wxide/cli_login.html&apos;
+                
+                cli --port 3000 -o
+            	cli --port 3000 -l --login-qr-output base64@%PATH_WWW%wxide/login.txt
             	
             )
             &apos;&apos;&apos;

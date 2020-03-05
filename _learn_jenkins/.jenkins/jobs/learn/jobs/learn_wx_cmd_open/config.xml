@@ -9,25 +9,20 @@
       <options/>
     </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
   </actions>
-  <description>命令行打开微信小游戏IDE</description>
+  <description>微信IDE--打开项目</description>
   <keepDependencies>false</keepDependencies>
-  <properties>
-    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.12"/>
-    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.13">
-      <gitLabConnection></gitLabConnection>
-    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
-  </properties>
+  <properties/>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
     <script>pipeline {
    agent any
 
    stages {
-      stage(&apos;打开微信IDE&apos;) {
+      stage(&apos;微信IDE--打开项目&apos;) {
          steps {
             bat label: &apos;&apos;, script: 
             &apos;&apos;&apos;
             echo %PATH%
-            cli.bat --port 3000 -o D:/zengfeng/GameJJSGH5/client/client/GameWX/wxgame 
+            cli.bat --port 3000 -o %PATH_WX_PROJECT_TEST%
             pause
             &apos;&apos;&apos;
          }

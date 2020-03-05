@@ -1,0 +1,76 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.36">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.5.1"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.5.1">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>测试发生邮件</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
+    <script>pipeline {
+   agent any
+
+   stages 
+   {
+      stage(&apos;SendEmail&apos;) {
+         steps {
+            emailext body: &apos;测试pipeline 发生Email, 测试pipeline 发生Email&apos;, subject: &apos;测试pipeline 发生Email&apos;, to: &apos;fengzeng@123u.com&apos;
+         }
+      }
+      
+      
+      stage(&apos;SendEmail2&apos;) {
+         steps {
+             wrap([$class: &apos;BuildUser&apos;]) {
+                emailext body: &apos;2测试pipeline 发生Email, 测试pipeline 发生Email&apos;, subject: &apos;2测试pipeline 发生Email&apos;, to: &quot;${BUILD_USER_EMAIL}&quot;
+              }
+         }
+      }
+      
+      
+      stage(&apos;SendEmail3&apos;) {
+         steps {
+             script
+             {
+                 String buildUserEmail
+                 wrap([$class: &apos;BuildUser&apos;]) {
+                     echo env.BUILD_USER_EMAIL
+                    buildUserEmail=env.BUILD_USER_EMAIL
+                  }
+              
+              echo &quot;${buildUserEmail}&quot;
+                    emailext body: &apos;3测试pipeline 发生Email, 测试pipeline 发生Email&apos;, subject: &apos;3测试pipeline 发生Email&apos;, to: &quot;${buildUserEmail}&quot;
+                 
+             }
+         }
+      }
+   }
+      
+      
+   post 
+   {
+       
+    	  success 
+    	  {
+    	  	script
+    	  	{
+    
+    	  		currentBuild.description = &quot;构建成功&quot;
+    	    	echo &quot;success 只有当前流水线或阶段的完成状态为success，才允许在 post 部分运行该步骤, 通常web UI是蓝色或绿色。&quot;
+                emailext body: &apos;构建成功 测试pipeline 发生Email, 测试pipeline 发生Email &lt;a href=&quot;http://10.0.127.162:9090&quot;/&gt;http://10.0.127.162:9090/&lt;/a&gt;&apos;, subject: &apos;构建成功 测试pipeline 发生Email&apos;, to: &apos;fengzeng@123u.com&apos;
+    	  	}
+    	  }
+   }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
