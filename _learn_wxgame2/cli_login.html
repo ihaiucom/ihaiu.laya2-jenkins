@@ -37,11 +37,6 @@
                 image.onerror = onerror;
                 image.src = http.responseText;
                 document.body.appendChild(image);
-                // var image = document.createElement("Image");
-                // // image.async = false;
-                // // image.src = url;
-                // image.src=http.responseText;
-                // document.body.appendChild(image);
             }
             http.send();
            
