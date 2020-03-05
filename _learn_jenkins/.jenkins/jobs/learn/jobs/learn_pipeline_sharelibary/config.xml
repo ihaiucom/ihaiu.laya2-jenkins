@@ -14,10 +14,6 @@
   <description>学习jenkins 共享库</description>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.12"/>
-    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.13">
-      <gitLabConnection></gitLabConnection>
-    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
     <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty/>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
@@ -43,7 +39,7 @@ pipeline
    options 
    {
    		timestamps()  							// 日志会有时间
-	  	timeout(time: 20, unit: &apos;SECONDS&apos;) 		// 设置超时时间
+	  	// timeout(time: 20, unit: &apos;SECONDS&apos;) 		// 设置超时时间
 	  	retry(2)								// 设置重复次数
 	  	disableConcurrentBuilds()				// 不允许并发构建
 	  	//skipDefaultCheckout true				// 删除隐试checkou scm语句

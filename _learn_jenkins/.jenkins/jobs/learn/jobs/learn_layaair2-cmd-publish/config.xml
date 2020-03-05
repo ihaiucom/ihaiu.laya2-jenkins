@@ -9,7 +9,7 @@
       <options/>
     </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
   </actions>
-  <description>发布微信小游戏</description>
+  <description>测试layaair2-cmd 发布web</description>
   <keepDependencies>false</keepDependencies>
   <properties/>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
@@ -17,25 +17,27 @@
    agent any
 
    stages {
-      stage(&apos;打开微信IDE&apos;) {
+      stage(&apos;发布web&apos;) {
          steps {
-            bat label: &apos;&apos;, script: 
-            &apos;&apos;&apos;
-            echo %PATH%
-            cli.bat --port 3000 -o %PATH_WX_PROJECT_TEST% 
-            &apos;&apos;&apos;
+             bat label: &apos;&apos;, script: 
+             &apos;&apos;&apos;
+                echo &quot;PATH_LAYA_PROJECT_TEST:&quot;  %PATH_LAYA_PROJECT_TEST%
+                layaair2-cmd publish -c web -w  %PATH_LAYA_PROJECT_TEST%
+             &apos;&apos;&apos;
          }
       }
       
       
-      stage(&apos;微信IDE--上传&apos;) {
+      stage(&apos;发布wxgame&apos;) {
          steps {
-            bat label: &apos;&apos;, script: 
-            &apos;&apos;&apos;
-            cli -u 1.0.0@%PATH_WX_PROJECT_TEST% --upload-desc &apos;initial release&apos; --upload-info-output %PATH_WWW%/wxide//info.json
-            &apos;&apos;&apos;
+             bat label: &apos;&apos;, script: 
+             &apos;&apos;&apos;
+                echo &quot;PATH_LAYA_PROJECT_TEST:&quot;  %PATH_LAYA_PROJECT_TEST%
+                layaair2-cmd publish -c wxgame -w  %PATH_LAYA_PROJECT_TEST%
+             &apos;&apos;&apos;
          }
       }
+      
    }
 }
 </script>

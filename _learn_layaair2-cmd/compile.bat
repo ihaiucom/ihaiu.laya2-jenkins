@@ -1,0 +1,1 @@
+layaair2-cmd compile -w D:\github\ihaiu.laya2-jenkins\LayaGame24
