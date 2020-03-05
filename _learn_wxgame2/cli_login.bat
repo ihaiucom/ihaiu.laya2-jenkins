@@ -1,0 +1,1 @@
+cli --port 3000 -l --login-qr-output base64@D:/wamp/www/wxide/login.txt
